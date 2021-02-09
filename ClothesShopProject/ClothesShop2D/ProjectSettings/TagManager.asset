@@ -38,6 +38,18 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Ground
+    uniqueID: 2729137731
+    locked: 0
+  - name: Build
+    uniqueID: 4139422525
+    locked: 0
+  - name: Furniture
+    uniqueID: 3503657901
+    locked: 0
+  - name: Roof Trim
+    uniqueID: 2614479403
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
