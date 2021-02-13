@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Interactable
   layers:
   - Default
   - TransparentFX
@@ -44,11 +45,11 @@ TagManager:
   - name: Build
     uniqueID: 4139422525
     locked: 0
-  - name: Furniture
-    uniqueID: 3503657901
-    locked: 0
   - name: Roof Trim
     uniqueID: 2614479403
+    locked: 0
+  - name: Furniture
+    uniqueID: 3503657901
     locked: 0
   - name: Default
     uniqueID: 0

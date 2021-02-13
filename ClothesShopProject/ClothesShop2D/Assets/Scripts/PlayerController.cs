@@ -9,6 +9,7 @@ namespace Shop.Control
     public class PlayerController : MonoBehaviour
     {
         [SerializeField] float speed = 2f;
+        public bool shouldFreeze = false;
         Rigidbody2D rb;
         Vector2 movement;
         Animator anim;
@@ -21,8 +22,15 @@ namespace Shop.Control
 
         private void Update()
         {
-            movement.x = Input.GetAxis("Horizontal");
-            movement.y = Input.GetAxis("Vertical");
+            if (!shouldFreeze)
+            {
+                movement.x = Input.GetAxis("Horizontal");
+                movement.y = Input.GetAxis("Vertical");
+            }
+            else
+            {
+                movement = Vector2.zero;
+            }
 
             UpdateAnimations();
         }
@@ -34,8 +42,14 @@ namespace Shop.Control
 
         private void UpdateAnimations()
         {
-            anim.SetFloat("Horizontal", movement.x);
-            anim.SetFloat("Vertical", movement.y);
+            // when the vector is zero the animation doesn't receive an ambiguous direction
+            // therefore the last idle animation used is played when stopped
+            if (movement != Vector2.zero)
+            {
+                anim.SetFloat("Horizontal", movement.x);
+                anim.SetFloat("Vertical", movement.y);
+            }
+
             anim.SetFloat("Speed", movement.magnitude);
         }
 
