@@ -18,23 +18,21 @@ public class Outfit
 public class Store : MonoBehaviour
 {
     [SerializeField] Outfit[] outfits;
-    [SerializeField] SpriteRenderer playerSpriteRenderer;
     [SerializeField] ShopUI shopUI;
     [SerializeField] DialogueManager dialogueManager;
-    [SerializeField] PlayableDirector playableDirector;
-    Sprite originalSprite = null;
-    Animator originalAnimator = null;
+    [SerializeField] PlayableDirector playerPlayableDirector;
+    [SerializeField] PlayableDirector enviroPlayableDirector;
+
+    float changeOutfitDelaySeconds = 7.5f;
+    float enviroTimelineDelay = 8.25f;
     Animator animator;
     Outfit purchased = null;
 
 
-
+    // todo block being able to talk to people if shopping
     void Start()
     {
-        
-        originalSprite = playerSpriteRenderer.sprite;
-        animator = playerSpriteRenderer.GetComponent<Animator>();
-        originalAnimator = animator;
+        animator = GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>();
     }
 
     public void OpenShop()
@@ -46,40 +44,29 @@ public class Store : MonoBehaviour
     {
         return outfits;
     }
-
-    public Sprite GetOriginalSprite()
-    {
-        return originalSprite;
-    }
-
-    public SpriteRenderer GetPlayerSpriteRenderer()
-    {
-        return playerSpriteRenderer;
-    }
-
+    
     IEnumerator SetNewOutfit()
     {
-        yield return new WaitForSeconds(8.5f);
+        yield return new WaitForSeconds(changeOutfitDelaySeconds);
 
         animator.runtimeAnimatorController = purchased.animatorOverrideController;
-        originalSprite = playerSpriteRenderer.sprite;
 
         // This is to make the character facing the camera once the door opens
         animator.SetFloat("Vertical", 1.0f); 
         animator.SetFloat("Vertical", 0);
-
     }
 
     public void PrepareNewOutfit(Outfit outfit)
     {
         purchased = outfit;
         StartCoroutine(SetNewOutfit());
+        StartCoroutine(StartTimeline());
     }
 
-    public void StartTimeline()
+    private IEnumerator StartTimeline()
     {
-        playableDirector.Play();
+        playerPlayableDirector.Play();
+        yield return new WaitForSeconds(enviroTimelineDelay);
+        enviroPlayableDirector.Play();
     }
-
-
 }

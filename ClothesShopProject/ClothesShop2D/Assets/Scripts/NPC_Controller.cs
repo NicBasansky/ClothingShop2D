@@ -12,7 +12,7 @@ namespace Shop.Control
 
         [SerializeField] PatrolPath patrolPath;
         [SerializeField] float walkingSpeed = 1f;
-        [SerializeField] float stoppingDistance = 0.1f;
+        [SerializeField] float stoppingDistance = 0.5f;
         [SerializeField] float waitDelay = 2f;
 
         int currentWaypointIndex = 0;

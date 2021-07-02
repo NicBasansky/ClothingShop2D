@@ -18,6 +18,13 @@ public class ShopUI : MonoBehaviour
     [SerializeField] TextMeshProUGUI costAmount;
     [SerializeField] TextMeshProUGUI walletAmount;
     [SerializeField] Wallet playerWallet;
+
+    [Header("Sounds")]
+    [SerializeField] AudioClip popUpSound;
+    [SerializeField] AudioClip nextButtonSound;
+    [SerializeField] AudioClip buySound;
+    [SerializeField] AudioClip cancelSound;
+
     Animator playerAnimator;
     Store store;
     Outfit[] outfits;
@@ -46,6 +53,7 @@ public class ShopUI : MonoBehaviour
         outfitIndex = 0;
         walletAmount.text = string.Format("{0:0.00}", playerWallet.GetTotalMoney());
         UpdateSprite();
+        AudioSource.PlayClipAtPoint(popUpSound, Camera.main.transform.position);
     }
 
     private void SetActiveShopUI(bool enabled)
@@ -62,6 +70,7 @@ public class ShopUI : MonoBehaviour
             outfitIndex = outfits.Length - 1;
         }
         UpdateSprite();
+        AudioSource.PlayClipAtPoint(nextButtonSound, Camera.main.transform.position);
     }
 
     private void RightArrow()
@@ -72,6 +81,8 @@ public class ShopUI : MonoBehaviour
             outfitIndex = 0;
         }
         UpdateSprite();
+        AudioSource.PlayClipAtPoint(nextButtonSound, Camera.main.transform.position);
+
     }
 
     void UpdateSprite()
@@ -86,13 +97,8 @@ public class ShopUI : MonoBehaviour
             return;
         outfits[outfitIndex].previouslyPurchased = true;
 
-        // sequencer.BeginSequence();
-        //store.SetNewOutfit(outfits[outfitIndex]);
+        AudioSource.PlayClipAtPoint(buySound, Camera.main.transform.position);
 
-        // change outfits after moving to change room
-        //if (outfits[outfitIndex].animatorOverrideController)
-        //   playerAnimator.runtimeAnimatorController = outfits[outfitIndex].animatorOverrideController;
-        store.StartTimeline();
         playerWallet.SubtractAmount(outfits[outfitIndex].cost);
         walletAmount.text = string.Format("{0:0.00}", playerWallet.GetTotalMoney());
         store.PrepareNewOutfit(outfits[outfitIndex]);
@@ -101,8 +107,9 @@ public class ShopUI : MonoBehaviour
 
     private void Cancel()
     {
-        avatar.sprite = store.GetOriginalSprite();
         SetActiveShopUI(false);
+        AudioSource.PlayClipAtPoint(cancelSound, Camera.main.transform.position);
+
     }
 
 }

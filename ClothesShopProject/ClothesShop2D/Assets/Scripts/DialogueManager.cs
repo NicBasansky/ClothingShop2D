@@ -15,8 +15,12 @@ namespace Shop.UI
         [SerializeField] TMP_Text sentenceTextInteractable;
         [SerializeField] GameObject NPC;
         [SerializeField] Image speakerImage;
-
         [SerializeField] Animator animator;
+
+        [Header("Sounds")]
+        [SerializeField] AudioClip openDialougeSound;
+        [SerializeField] AudioClip nextSentenceSound;
+        [SerializeField] AudioClip closeDialougeSound;
 
         public event Action onDialogueEnd;
 
@@ -35,7 +39,8 @@ namespace Shop.UI
         {
             this.store = store;
             animator.SetBool("isOpen", true);
-
+            // open sound
+            AudioSource.PlayClipAtPoint(openDialougeSound, Camera.main.transform.position);
             if (dialogue.isNPC)
             {
                 nameText.text = dialogue.speakerName;
@@ -51,6 +56,7 @@ namespace Shop.UI
             foreach (var sentence in dialogue.sentences)
             {
                 sentences.Enqueue(sentence);
+                
             }
 
             DisplayNextSentence();
@@ -67,6 +73,8 @@ namespace Shop.UI
                 EndDialogue();
                 return;
             }
+
+            AudioSource.PlayClipAtPoint(nextSentenceSound, Camera.main.transform.position);
 
             string sentence = sentences.Dequeue();
 
@@ -101,6 +109,8 @@ namespace Shop.UI
         {
             animator.SetBool("isOpen", false);
             onDialogueEnd();
+            // close sound
+            AudioSource.PlayClipAtPoint(closeDialougeSound, Camera.main.transform.position);
         }
 
         private void SetupTextBox(bool isPerson)
