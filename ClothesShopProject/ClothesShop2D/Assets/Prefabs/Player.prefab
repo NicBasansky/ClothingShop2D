@@ -99,6 +99,8 @@ GameObject:
   - component: {fileID: 1122889343995474846}
   - component: {fileID: 4249812532461432121}
   - component: {fileID: 5131206847284179671}
+  - component: {fileID: 1776340870043054344}
+  - component: {fileID: 2940050574706894178}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -220,11 +222,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 6981262274592163790}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ce788d2ab04c1d468ceb98d9284ad07, type: 3}
+  m_Script: {fileID: 11500000, guid: 6ea28f65d0916cc4f8560c1bb3b350e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1.5
-  shouldFreeze: 0
+  currentInteractable: {fileID: 0}
+  dialogueManager: {fileID: 0}
 --- !u!114 &1122889343995474846
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -234,11 +236,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 6981262274592163790}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd085c04311d5944e80db5f700f5111c, type: 3}
+  m_Script: {fileID: 11500000, guid: 640e51e651d30e240bbd65f600b6d707, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentInteractable: {fileID: 0}
-  dialogueManager: {fileID: 0}
+  speed: 1
+  shouldFreeze: 0
 --- !u!70 &4249812532461432121
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -271,3 +273,37 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: -0.2}
   m_Size: {x: 0.2, y: 0.0001}
   m_Direction: 0
+--- !u!114 &1776340870043054344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6981262274592163790}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d671685c24040e742be09570aa77bb4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  money: 20
+--- !u!320 &2940050574706894178
+PlayableDirector:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6981262274592163790}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_PlayableAsset: {fileID: 11400000, guid: 955014f4218c02140b82a94fb2bad441, type: 2}
+  m_InitialState: 0
+  m_WrapMode: 2
+  m_DirectorUpdateMode: 1
+  m_InitialTime: 0
+  m_SceneBindings:
+  - key: {fileID: -6393445005473824532, guid: 955014f4218c02140b82a94fb2bad441, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -6311861794638093466, guid: 955014f4218c02140b82a94fb2bad441, type: 2}
+    value: {fileID: 0}
+  m_ExposedReferences:
+    m_References: []

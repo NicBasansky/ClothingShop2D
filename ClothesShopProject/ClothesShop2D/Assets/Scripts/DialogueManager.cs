@@ -4,18 +4,22 @@ using UnityEngine;
 using System;
 using UnityEngine.UI;
 using TMPro;
+using Shop.Control;
 
 namespace Shop.UI
 {
     public class DialogueManager : MonoBehaviour
     {
-        [SerializeField] float printSpeed = 0.1f;
+        [SerializeField] float secondsPerLetterPrint = 0.015f;
         [SerializeField] TMP_Text nameText;
         [SerializeField] TMP_Text sentenceTextNPC;
         [SerializeField] TMP_Text sentenceTextInteractable;
         [SerializeField] GameObject NPC;
         [SerializeField] Image speakerImage;
         [SerializeField] Animator animator;
+        [SerializeField] PlayerController playerController;
+        [SerializeField] PlayerInteracter interacter;
+
 
         [Header("Sounds")]
         [SerializeField] AudioClip openDialougeSound;
@@ -28,6 +32,7 @@ namespace Shop.UI
         private bool isNPC = false;
         private Store store = null;
         private bool hasShop = false;
+        private bool isShopOpen = false;
 
         private void Awake()
         {
@@ -39,7 +44,9 @@ namespace Shop.UI
         {
             this.store = store;
             animator.SetBool("isOpen", true);
-            // open sound
+
+            playerController.shouldFreeze = true;
+
             AudioSource.PlayClipAtPoint(openDialougeSound, Camera.main.transform.position);
             if (dialogue.isNPC)
             {
@@ -69,6 +76,7 @@ namespace Shop.UI
                 if (store)
                 {
                     store.OpenShop();
+
                 }
                 EndDialogue();
                 return;
@@ -91,7 +99,7 @@ namespace Shop.UI
                 foreach (char letter in sentence.ToCharArray())
                 {
                     sentenceTextNPC.text += letter;
-                    yield return new WaitForSeconds(printSpeed);
+                    yield return new WaitForSeconds(secondsPerLetterPrint);
                 }
             }
             else
@@ -99,7 +107,7 @@ namespace Shop.UI
                 foreach (char letter in sentence.ToCharArray())
                 {
                     sentenceTextInteractable.text += letter;
-                    yield return new WaitForSeconds(printSpeed);
+                    yield return new WaitForSeconds(secondsPerLetterPrint);
                 }
             }
 
@@ -121,6 +129,8 @@ namespace Shop.UI
             sentenceTextNPC.text = "";
             sentenceTextInteractable.text = "";
         }
+
+  
 
     }
 

@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using Shop.UI;
 using System;
 using UnityEngine.Playables;
+using Shop.Control;
 
 [System.Serializable]
 public class Outfit
@@ -50,10 +51,12 @@ public class Store : MonoBehaviour
         yield return new WaitForSeconds(changeOutfitDelaySeconds);
 
         animator.runtimeAnimatorController = purchased.animatorOverrideController;
+        animator.GetComponent<PlayerController>().shouldFreeze = false;
+        animator.GetComponent<PlayerInteracter>().SetIsShopOpen(false);
 
         // This is to make the character facing the camera once the door opens
-        animator.SetFloat("Vertical", 1.0f); 
-        animator.SetFloat("Vertical", 0);
+        animator.SetFloat("Vertical", -1.0f); 
+        //animator.SetFloat("Vertical", 0);
     }
 
     public void PrepareNewOutfit(Outfit outfit)

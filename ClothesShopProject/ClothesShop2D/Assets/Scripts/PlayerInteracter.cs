@@ -14,7 +14,7 @@ namespace Shop.Control
         private PlayerController playerController;
         private bool interacting = false;
         private bool dialogueTriggered = false;
-
+        private bool isShopOpen = false;
 
 
         private void OnEnable()
@@ -51,6 +51,8 @@ namespace Shop.Control
 
         private void Update()
         {
+            if (isShopOpen) return;
+            
             if (Input.GetKeyDown(KeyCode.Space)
                              && currentInteractable != null)
             {
@@ -78,7 +80,14 @@ namespace Shop.Control
         {
             interacting = false;
             dialogueTriggered = false;
-            playerController.shouldFreeze = false;
+
+            if (!isShopOpen)
+                playerController.shouldFreeze = false;
+        }
+
+        public void SetIsShopOpen(bool opened)
+        {
+            isShopOpen = opened;
         }
     }
 }

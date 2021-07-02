@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using NicLib.Shops;
+using Shop.UI;
+using Shop.Control;
 
 public class ShopUI : MonoBehaviour
 {
@@ -13,11 +15,10 @@ public class ShopUI : MonoBehaviour
     [SerializeField] Button rightArrow;
     [SerializeField] Button buyButton;
     [SerializeField] Button cancelButton;
-    [SerializeField] Button shirtsButton;
-    [SerializeField] Button pantsButton;
     [SerializeField] TextMeshProUGUI costAmount;
     [SerializeField] TextMeshProUGUI walletAmount;
     [SerializeField] Wallet playerWallet;
+    [SerializeField] DialogueManager dialogueManager;
 
     [Header("Sounds")]
     [SerializeField] AudioClip popUpSound;
@@ -25,11 +26,14 @@ public class ShopUI : MonoBehaviour
     [SerializeField] AudioClip buySound;
     [SerializeField] AudioClip cancelSound;
 
+    GameObject player;
     Animator playerAnimator;
+    PlayerController playerController;
+    PlayerInteracter interacter;
     Store store;
     Outfit[] outfits;
     int outfitIndex = 0;
-    PurchaseClothesSequencer sequencer;
+
 
     void Start()
     {
@@ -39,10 +43,12 @@ public class ShopUI : MonoBehaviour
         rightArrow.onClick.AddListener(RightArrow);
         buyButton.onClick.AddListener(Buy);
         cancelButton.onClick.AddListener(Cancel);
-        // shirtsButton.onClick.AddListener(ChooseFromShirts);
-        // pantsButton.onClick.AddListener(ChooseFromPants);
-        playerAnimator = GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>();
         
+        player = GameObject.FindGameObjectWithTag("Player");
+        playerAnimator = player.GetComponent<Animator>();
+        interacter = player.GetComponent<PlayerInteracter>();
+        playerController = player.GetComponent<PlayerController>();
+
     }
 
     public void Init(Store store)
@@ -54,6 +60,7 @@ public class ShopUI : MonoBehaviour
         walletAmount.text = string.Format("{0:0.00}", playerWallet.GetTotalMoney());
         UpdateSprite();
         AudioSource.PlayClipAtPoint(popUpSound, Camera.main.transform.position);
+        interacter.SetIsShopOpen(true);
     }
 
     private void SetActiveShopUI(bool enabled)
@@ -109,7 +116,8 @@ public class ShopUI : MonoBehaviour
     {
         SetActiveShopUI(false);
         AudioSource.PlayClipAtPoint(cancelSound, Camera.main.transform.position);
-
+        interacter.SetIsShopOpen(false);
+        playerController.shouldFreeze = false;
     }
 
 }
