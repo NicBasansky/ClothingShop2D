@@ -22,6 +22,8 @@ namespace Shop.UI
 
         private Queue<string> sentences;
         private bool isNPC = false;
+        private Store store = null;
+        private bool hasShop = false;
 
         private void Awake()
         {
@@ -29,8 +31,9 @@ namespace Shop.UI
         }
 
 
-        public void StartDialogue(Dialogue dialogue)
+        public void StartDialogue(Dialogue dialogue, Store store)
         {
+            this.store = store;
             animator.SetBool("isOpen", true);
 
             if (dialogue.isNPC)
@@ -57,6 +60,10 @@ namespace Shop.UI
         {
             if (sentences.Count == 0)
             {
+                if (store)
+                {
+                    store.OpenShop();
+                }
                 EndDialogue();
                 return;
             }

@@ -76,10 +76,9 @@ namespace Shop.Control
         {
             Vector3 movement = (position - transform.position).normalized;
             transform.Translate(movement * walkingSpeed * Time.deltaTime);
-            // set animation horizontal and vertical params
+
             animator.SetFloat("Horizontal", movement.x);
             animator.SetFloat("Vertical", movement.y);
-
         }
 
         private Vector3 GetCurrentWaypoint()
@@ -125,6 +124,7 @@ namespace Shop.Control
         {
             if (other.CompareTag("Player"))
             {
+                if (animator == null) return;
                 shouldPatrol = false;
                 animator.SetFloat("Speed", 0);
             }
@@ -134,11 +134,10 @@ namespace Shop.Control
         {
             if (other.CompareTag("Player"))
             {
+                if (animator == null) return;
                 shouldPatrol = true;
                 animator.SetFloat("Speed", 1);
             }
         }
-
-        // todo make a patrol path
     }
 }

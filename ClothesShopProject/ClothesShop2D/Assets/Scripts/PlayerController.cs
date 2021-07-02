@@ -13,6 +13,7 @@ namespace Shop.Control
         Rigidbody2D rb;
         Vector2 movement;
         Animator anim;
+        
 
         private void Awake()
         {

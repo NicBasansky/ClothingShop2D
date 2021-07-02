@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Player_Walk_Up
+  m_Name: BlueKnight_Walk_Left
   serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0
@@ -20,11 +20,11 @@ AnimationClip:
   m_PPtrCurves:
   - curve:
     - time: 0
-      value: {fileID: 21300010, guid: 4ee5843fc71c6954ab9daafa40de566c, type: 3}
+      value: {fileID: 21300016, guid: 9b18a24d82593b246a830e8dbc70d38e, type: 3}
     - time: 0.11111111
-      value: {fileID: 21300012, guid: 4ee5843fc71c6954ab9daafa40de566c, type: 3}
+      value: {fileID: 21300018, guid: 9b18a24d82593b246a830e8dbc70d38e, type: 3}
     - time: 0.22222222
-      value: {fileID: 21300014, guid: 4ee5843fc71c6954ab9daafa40de566c, type: 3}
+      value: {fileID: 21300020, guid: 9b18a24d82593b246a830e8dbc70d38e, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -44,9 +44,9 @@ AnimationClip:
       customType: 23
       isPPtrCurve: 1
     pptrCurveMapping:
-    - {fileID: 21300010, guid: 4ee5843fc71c6954ab9daafa40de566c, type: 3}
-    - {fileID: 21300012, guid: 4ee5843fc71c6954ab9daafa40de566c, type: 3}
-    - {fileID: 21300014, guid: 4ee5843fc71c6954ab9daafa40de566c, type: 3}
+    - {fileID: 21300016, guid: 9b18a24d82593b246a830e8dbc70d38e, type: 3}
+    - {fileID: 21300018, guid: 9b18a24d82593b246a830e8dbc70d38e, type: 3}
+    - {fileID: 21300020, guid: 9b18a24d82593b246a830e8dbc70d38e, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}

@@ -54,3 +54,6 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: AlwaysFront
+    uniqueID: 3795553627
+    locked: 0

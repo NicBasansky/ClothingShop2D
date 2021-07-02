@@ -51,7 +51,8 @@ namespace Shop.Control
 
         private void Update()
         {
-            if (Input.GetButtonDown("Fire1") && currentInteractable != null)
+            if (Input.GetKeyDown(KeyCode.Space)
+                             && currentInteractable != null)
             {
                 Interact();
             }
@@ -71,8 +72,6 @@ namespace Shop.Control
             {
                 dialogueManager.DisplayNextSentence();
             }
-
-
         }
 
         private void OnEndDialogue() // TODO freeze movement
