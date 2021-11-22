@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
 
 
@@ -28,6 +29,8 @@ namespace GripPlacement
         Vector3 previousPosition;
         BoundsInt previousArea;
 
+        Vector3 offset = new Vector3(0.5f, 0.5f, 0);
+
         void Awake()
         {
             current = this;
@@ -46,11 +49,15 @@ namespace GripPlacement
         {
             placeObject = Instantiate<GameObject>(prefab,
                     Vector3.zero, Quaternion.identity).GetComponent<Placeable>();
+            Vector3 cellPos = gridLayout.LocalToCell(placeObject.transform.position);
+            placeObject.transform.localPosition = gridLayout.CellToLocalInterpolated(cellPos + offset);
+            UpdateTiles();
         }
 
         private void Update()
         {
             if (placeObject == null) return;
+            if (EventSystem.current.IsPointerOverGameObject()) return;
 
             if (!placeObject.placed)
             {
@@ -66,7 +73,7 @@ namespace GripPlacement
                         // move the placeable object
                         // was originally in local space
                         placeObject.transform.localPosition = gridLayout.CellToLocalInterpolated(cellPosition +
-                                    new Vector3(0.5f, 0.5f, 0)); // to make the object stand in the middle of the cell
+                                    offset); // to make the object stand in the middle of the cell
 
                         previousPosition = cellPosition;
                         UpdateTiles();
