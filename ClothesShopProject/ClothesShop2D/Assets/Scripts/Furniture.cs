@@ -12,12 +12,12 @@ public class Furniture : MonoBehaviour
 
     public bool CanBePlaced()
     {
-        Vector3Int positionInt = GridBuildingSystem.current.gridLayout.LocalToCell(transform.position);
+        Vector3Int positionInt = TutorialGridBuildingSystem.current.gridLayout.LocalToCell(transform.position);
         
         BoundsInt areaTemp = areaUnderneath;
         areaTemp.position = positionInt;
 
-        if (GridBuildingSystem.current.CanAcceptPlacementArea(areaTemp))
+        if (TutorialGridBuildingSystem.current.CanAcceptPlacementArea(areaTemp))
         {
             return true;
         }
@@ -26,14 +26,14 @@ public class Furniture : MonoBehaviour
 
     public void Place()
     {
-        Vector3Int positionInt = GridBuildingSystem.current.gridLayout.LocalToCell(transform.position);
+        Vector3Int positionInt = TutorialGridBuildingSystem.current.gridLayout.LocalToCell(transform.position);
 
         BoundsInt areaTemp = areaUnderneath;
         areaTemp.position = positionInt;
 
         placed = true;
 
-        GridBuildingSystem.current.TakeArea(areaTemp);
+        TutorialGridBuildingSystem.current.TakeArea(areaTemp);
     }
 
 }

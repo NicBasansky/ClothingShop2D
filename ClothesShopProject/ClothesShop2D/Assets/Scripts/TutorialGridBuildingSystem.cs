@@ -12,9 +12,9 @@ public enum TileType
     red
 };
 
-public class GridBuildingSystem : MonoBehaviour
+public class TutorialGridBuildingSystem : MonoBehaviour
 {
-    public static GridBuildingSystem current;
+    public static TutorialGridBuildingSystem current;
 
     public GridLayout gridLayout;
     public Tilemap mainTilemap;
