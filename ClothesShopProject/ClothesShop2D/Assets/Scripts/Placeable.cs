@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using NicLib.Shops;
 
 namespace NicLib.GridPlacement
 {
@@ -16,42 +17,45 @@ namespace NicLib.GridPlacement
         public BoundsInt areaUnderneath;
         private BoundsInt originalArea;
 
+        [SerializeField] int price = 0;
 
-        [HideInInspector]
+
+        //[HideInInspector]
         public bool placed;
-        [HideInInspector]
+        //[HideInInspector]
         public bool purchased = false;
-        [HideInInspector]
+        //[HideInInspector]
         public bool isSelected = false;
-        [HideInInspector]
+        //[HideInInspector]
         public bool isMoving = false;
 
-        [SerializeField] SpriteRenderer spriteRenderer;
         [SerializeField] GameObject front;
         [SerializeField] GameObject left;
         [SerializeField] GameObject back;
         [SerializeField] GameObject right;
-
-        // [SerializeField] Sprite front;
-        // [SerializeField] Sprite left;
-        // [SerializeField] Sprite back;
-        // [SerializeField] Sprite right;
-        //[SerializeField] Vector3 rotatedSpriteOffset;
         [SerializeField] BoxCollider2D originalCollider;
         [SerializeField] BoxCollider2D rotatedCollider;
-        // private Vector3 originalOffset;
+
+
+
         public SpriteFaceDirection faceDirection = SpriteFaceDirection.Front;
         private Collider2D colliderToUse;
+        private Wallet playerWallet;
+        private SpriteRenderer[] spriteRenderers;
 
         void Awake()
         {
             colliderToUse = originalCollider;
             originalCollider.enabled = false;
             rotatedCollider.enabled = false;
+
+            playerWallet = GameObject.FindGameObjectWithTag("Player").GetComponent<Wallet>();
         }
 
         void Start()
         {
+            
+
             if (faceDirection == SpriteFaceDirection.Front || faceDirection == SpriteFaceDirection.Back)
             {
                 originalArea = areaUnderneath;
@@ -61,13 +65,45 @@ namespace NicLib.GridPlacement
                 originalArea = new BoundsInt(areaUnderneath.position, new Vector3Int(areaUnderneath.size.y,
                                                     areaUnderneath.size.x, areaUnderneath.size.z));
             }
-     
-        }
 
+            if (front == null || left == null || back == null || right == null) return;
+            spriteRenderers = new SpriteRenderer[4];
+            spriteRenderers[0] = front.GetComponent<SpriteRenderer>();
+            spriteRenderers[1] = back.GetComponent<SpriteRenderer>();
+            spriteRenderers[2] = left.GetComponent<SpriteRenderer>();
+            spriteRenderers[3] = right.GetComponent<SpriteRenderer>();
+        }
 
         public bool CanBePlaced()
         {
-            return GridSystem.current.CheckIfTilesAreAvailable(areaUnderneath);
+            // check if enough money in wallet
+            if ((playerWallet.CheckIfHasEnoughMoney(price) && !purchased) || purchased)
+            {
+                if (GridSystem.current.CheckIfTilesAreAvailable(areaUnderneath))
+                {
+                    return true;
+                }
+            }
+            else if (!purchased && !playerWallet.CheckIfHasEnoughMoney(price))
+            {
+                // make a sound to indicate not enough money
+                
+            }
+
+            return false;
+        }
+
+        public void SetOrderLayer()
+        {
+            foreach(var rend in spriteRenderers)
+            {
+                rend.sortingOrder = areaUnderneath.position.y * -10;
+            }
+        }
+
+        public bool CanAfford()
+        {
+            return playerWallet.CheckIfHasEnoughMoney(price);
         }
 
         public void Place()
@@ -76,7 +112,12 @@ namespace NicLib.GridPlacement
             placed = true;
             GridSystem.current.TakeArea(areaUnderneath);
             EnableColliderToUse();
-
+            
+            if (!purchased)
+            {
+                playerWallet.SubtractAmount(price);
+                purchased = true;
+            }
         }
 
         private void EnableColliderToUse()
@@ -95,11 +136,13 @@ namespace NicLib.GridPlacement
 
         void OnMouseDown()
         {
+            //print("OnMouseDown called by: " + gameObject.name);
             if (isMoving) return;
             if (GridSystem.current.CanAcceptPlaceableObject())
             {
                 if (GridSystem.current.IsDecoMode())
                 {
+                    isMoving = true;
                     colliderToUse.enabled = false;
                     GridSystem.current.MovePlaceable(this.gameObject, this);             
                 }
@@ -113,9 +156,11 @@ namespace NicLib.GridPlacement
             if (clockwise)
             {
                 int fd = (int)faceDirection;
+
                 fd++;
                 fd %= 4;
                 faceDirection = (SpriteFaceDirection)fd;
+                //print("fd: " + fd);
             }
             else
             {
@@ -127,7 +172,7 @@ namespace NicLib.GridPlacement
                 }
                 faceDirection = (SpriteFaceDirection)fd;
             }
-            print(faceDirection);
+            //print(faceDirection + "int: " + ((int)faceDirection));
 
             EnableDirectionalSprite();
         }
@@ -141,7 +186,7 @@ namespace NicLib.GridPlacement
             left.SetActive(false);
             back.SetActive(false);
             right.SetActive(false);
-            
+
             // re-enable the correct sprite
             switch (faceDirection)
             {
@@ -173,6 +218,17 @@ namespace NicLib.GridPlacement
             BoundsInt rotatedBounds = new BoundsInt(originalArea.position, new Vector3Int(originalArea.size.y,
                                                 originalArea.size.x, originalArea.size.z));
             areaUnderneath = rotatedBounds;
+        }
+
+        public int GetItemCost()
+        {
+            return price;
+        }
+
+        public Sprite GetFrontSprite()
+        {
+            Sprite frontSprite = front.GetComponent<SpriteRenderer>().sprite;
+            return frontSprite;
         }
 
     }

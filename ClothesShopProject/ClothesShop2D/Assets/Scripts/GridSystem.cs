@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
+using UnityEngine.UI;
 
 
 namespace NicLib.GridPlacement
@@ -34,6 +35,9 @@ namespace NicLib.GridPlacement
         Vector3 offset = new Vector3(0.5f, 0.5f, 0);
         Placeable tempToMove = null;
 
+        [SerializeField] Button moveRotateButton;
+        [SerializeField] Button moveRotateButton1;
+
         void Awake()
         {
             current = this;
@@ -51,6 +55,10 @@ namespace NicLib.GridPlacement
 
         public void Initialize(GameObject prefab)
         {
+            if (placeObject != null)
+            {
+                Cancel();
+            }
             placeObject = Instantiate<GameObject>(prefab,
                     Vector3.zero, Quaternion.identity).GetComponent<Placeable>();
             Vector3 cellPos = gridLayout.LocalToCell(placeObject.transform.position);
@@ -70,6 +78,8 @@ namespace NicLib.GridPlacement
                 placeObject.transform.localPosition = gridLayout.CellToLocalInterpolated(cellPos +
                                     offset);
 
+                placeObject.SetOrderLayer();
+
                 if (previousPosition != cellPos)
                 {
                     previousPosition = cellPos;
@@ -82,13 +92,7 @@ namespace NicLib.GridPlacement
                 }
                 else if (Input.GetKeyDown(KeyCode.Escape))
                 {
-                    ClearArea();
-                    if (placeObject.isMoving)
-                    {
-                        tempToMove.gameObject.SetActive(true);
-                        SetTilesFromArea(tempToMove.areaUnderneath, TileType.Occupied, mainTilemap);
-                    }
-                    Destroy(placeObject.gameObject);
+                    Cancel();
                 }
             }
 
@@ -100,7 +104,31 @@ namespace NicLib.GridPlacement
                 placeObject.isMoving = true;
             }
 
+            if (placeObject == null)
+            {
+                moveRotateButton.interactable = false;
+                moveRotateButton1.interactable = false;
+            } else
+            {
+                moveRotateButton.interactable = true;
+                moveRotateButton1.interactable = true;
+            }
             
+        }
+
+        public void Cancel()
+        {
+            if (placeObject != null)
+            {
+                ClearArea(); 
+                if (placeObject.isMoving)
+                {
+                    tempToMove.gameObject.SetActive(true);
+                    SetTilesFromArea(tempToMove.areaUnderneath, TileType.Occupied, mainTilemap);
+                }
+                Destroy(placeObject.gameObject);
+
+            }
         }
 
         public void MovePlaceable(GameObject prefab, Placeable callingPlaceable)
@@ -111,18 +139,24 @@ namespace NicLib.GridPlacement
             Vector3 localPos = gridLayout.CellToLocalInterpolated(cellPos + offset);
             placeObject = Instantiate<GameObject>(prefab,
                     localPos, Quaternion.identity).GetComponent<Placeable>();
+            
+            
 
             placeObject.placed = false;
+            //placeObject.isMoving = true;
             placeObject.isSelected = true;
             tempToMove = callingPlaceable;
             tempToMove.gameObject.SetActive(false);
-            UpdateTiles();
+            //UpdateTiles();
+        }
+
+        public void SetAllTilesUnavailable(BoundsInt area)
+        {
+            SetTilesFromArea(area, TileType.Red, tempTilemap);
         }
 
         public void RotatePlaceable(bool clockwise)
         {
-            if (placeObject == null) return;
-
             placeObject.RotateSpriteDirection(clockwise);
             UpdateTiles();
         }
@@ -220,6 +254,11 @@ namespace NicLib.GridPlacement
             // go through each tile on the main tilemap and see if it is white
             for (int i = 0; i < tilesUnderneath_MainTilemap.Length; i++)
             {
+                if (!placeObject.purchased && !placeObject.CanAfford())
+                {
+                    FillTiles(tilesUnderneath_TempTilemap, TileType.Red);
+                    break;
+                }
                 // if tiles on the main tilemap are white
                 if (tilesUnderneath_MainTilemap[i] == TileTypeToResourceTileDict[TileType.White])
                 {
