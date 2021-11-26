@@ -11,8 +11,13 @@ public class PurchaseableItemUI : MonoBehaviour
     [SerializeField] Image displaySprite;
     [SerializeField] TMP_Text text;
 
+    Button button;
+
     void Start()
     {
+        button = GetComponent<Button>();
+        button.onClick.AddListener(PlaySelectSound);
+
         Placeable placeable = prefab.GetComponent<Placeable>();
         if (placeable == null)
         {
@@ -28,5 +33,10 @@ public class PurchaseableItemUI : MonoBehaviour
     public void SpawnPrefab()
     {
         GridSystem.current.Initialize(prefab);
+    }
+
+    private void PlaySelectSound()
+    {
+        AudioManager.current.PlaySound_PopUp();
     }
 }

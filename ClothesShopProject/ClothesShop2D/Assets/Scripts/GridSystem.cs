@@ -38,6 +38,8 @@ namespace NicLib.GridPlacement
         [SerializeField] Button moveRotateButton;
         [SerializeField] Button moveRotateButton1;
 
+        
+
         void Awake()
         {
             current = this;
@@ -166,6 +168,8 @@ namespace NicLib.GridPlacement
             if (placeObject.CanBePlaced())
             {
                 placeObject.Place();
+
+                if (placeObject)
 
                 SetTilesFromArea(placeObject.areaUnderneath, TileType.Occupied, mainTilemap);
                 if (placeObject.isMoving)

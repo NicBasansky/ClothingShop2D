@@ -59,7 +59,8 @@ public class ShopUI : MonoBehaviour
         outfitIndex = 0;
         walletAmount.text = string.Format("{0:0.00}", playerWallet.GetTotalMoney());
         UpdateSprite();
-        AudioSource.PlayClipAtPoint(popUpSound, Camera.main.transform.position);
+        AudioManager.current.PlaySound_PopUp();
+        //AudioSource.PlayClipAtPoint(popUpSound, Camera.main.transform.position);
         interacter.SetIsShopOpen(true);
     }
 
@@ -77,7 +78,8 @@ public class ShopUI : MonoBehaviour
             outfitIndex = outfits.Length - 1;
         }
         UpdateSprite();
-        AudioSource.PlayClipAtPoint(nextButtonSound, Camera.main.transform.position);
+        AudioManager.current.PlaySound_NextButton();
+        //AudioSource.PlayClipAtPoint(nextButtonSound, Camera.main.transform.position);
     }
 
     private void RightArrow()
@@ -88,7 +90,8 @@ public class ShopUI : MonoBehaviour
             outfitIndex = 0;
         }
         UpdateSprite();
-        AudioSource.PlayClipAtPoint(nextButtonSound, Camera.main.transform.position);
+        AudioManager.current.PlaySound_NextButton();
+        //AudioSource.PlayClipAtPoint(nextButtonSound, Camera.main.transform.position);
 
     }
 
@@ -104,7 +107,8 @@ public class ShopUI : MonoBehaviour
             return;
         outfits[outfitIndex].previouslyPurchased = true;
 
-        AudioSource.PlayClipAtPoint(buySound, Camera.main.transform.position);
+        AudioManager.current.PlaySound_Confirm();
+        //AudioSource.PlayClipAtPoint(buySound, Camera.main.transform.position);
 
         playerWallet.SubtractAmount(outfits[outfitIndex].cost);
         walletAmount.text = string.Format("{0:0.00}", playerWallet.GetTotalMoney());
@@ -115,7 +119,8 @@ public class ShopUI : MonoBehaviour
     private void Cancel()
     {
         SetActiveShopUI(false);
-        AudioSource.PlayClipAtPoint(cancelSound, Camera.main.transform.position);
+        AudioManager.current.PlaySound_Cancel();
+        //AudioSource.PlayClipAtPoint(cancelSound, Camera.main.transform.position);
         interacter.SetIsShopOpen(false);
         playerController.shouldFreeze = false;
     }

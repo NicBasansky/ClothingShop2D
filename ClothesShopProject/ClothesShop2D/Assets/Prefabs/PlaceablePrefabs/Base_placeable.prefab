@@ -130,15 +130,20 @@ MonoBehaviour:
   areaUnderneath:
     m_Position: {x: 0, y: 0, z: 0}
     m_Size: {x: 1, y: 1, z: 1}
+  price: 0
   placed: 0
   purchased: 0
   isSelected: 0
   isMoving: 0
-  spriteRenderer: {fileID: 5396410926678695629}
   front: {fileID: 0}
   left: {fileID: 0}
   back: {fileID: 0}
   right: {fileID: 0}
+  originalCollider: {fileID: 0}
+  rotatedCollider: {fileID: 0}
+  moneySound: {fileID: 8300000, guid: 3a3a46897dd2f154a85c179a79714c7d, type: 3}
+  moveObjectSound: {fileID: 8300000, guid: f90ded5c750f57b4f9622fa67ade8075, type: 3}
+  noMoneySound: {fileID: 8300000, guid: c57c3b5dee2b4444fb916cbfc06c484a, type: 3}
   faceDirection: 0
 --- !u!61 &793132731217789257
 BoxCollider2D:

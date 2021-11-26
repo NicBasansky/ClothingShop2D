@@ -37,6 +37,9 @@ namespace NicLib.GridPlacement
         [SerializeField] BoxCollider2D rotatedCollider;
 
 
+        [SerializeField] AudioClip moneySound;
+        [SerializeField] AudioClip moveObjectSound;
+        [SerializeField] AudioClip noMoneySound;
 
         public SpriteFaceDirection faceDirection = SpriteFaceDirection.Front;
         private Collider2D colliderToUse;
@@ -87,7 +90,7 @@ namespace NicLib.GridPlacement
             else if (!purchased && !playerWallet.CheckIfHasEnoughMoney(price))
             {
                 // make a sound to indicate not enough money
-                
+                AudioSource.PlayClipAtPoint(noMoneySound, Camera.main.transform.position);
             }
 
             return false;
@@ -115,9 +118,11 @@ namespace NicLib.GridPlacement
             
             if (!purchased)
             {
+                AudioSource.PlayClipAtPoint(moneySound, Camera.main.transform.position);
                 playerWallet.SubtractAmount(price);
                 purchased = true;
             }
+            AudioSource.PlayClipAtPoint(moveObjectSound, Camera.main.transform.position);
         }
 
         private void EnableColliderToUse()
